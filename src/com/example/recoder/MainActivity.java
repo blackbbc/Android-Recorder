@@ -6,6 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -43,7 +47,7 @@ public class MainActivity extends ActionBarActivity {
         list=(ListView)findViewById(R.id.listView1);
         mylist=new ArrayList<String>();
         
-        adapter=new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1,mylist);
+        adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_activated_1,mylist);
         list.setAdapter(adapter);
         
         refreshFiles();
@@ -95,7 +99,45 @@ public class MainActivity extends ActionBarActivity {
 			}
 		});
         
-        
+        list.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				
+				songPath=(String) list.getItemAtPosition(position);
+				songPath=Environment.getExternalStorageDirectory().getPath()+"/sound_recorder/"+songPath;
+				
+				AlertDialog.Builder builder=new Builder(MainActivity.this);
+				builder.setMessage("确定删除吗?");
+				builder.setTitle("提示");
+				builder.setPositiveButton("确认", new android.content.DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						File f=new File(songPath);
+						if (f.exists()) {
+							f.delete();
+							refreshFiles();
+						}
+							
+						dialog.dismiss();
+					}
+				});
+				builder.setNegativeButton("取消", new android.content.DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						dialog.dismiss();
+					}
+				});
+				builder.create().show();
+				return false;
+			}
+		});
 
     }
     
