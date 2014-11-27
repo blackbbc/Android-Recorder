@@ -333,8 +333,12 @@ int drawable abc_textfield_default_mtrl_alpha 0x7f02002f
 int drawable abc_textfield_search_activated_mtrl_alpha 0x7f020030
 int drawable abc_textfield_search_default_mtrl_alpha 0x7f020031
 int drawable abc_textfield_search_material 0x7f020032
-int drawable ic_launcher 0x7f020033
-int drawable icon 0x7f020034
+int drawable ic_action_mic 0x7f020033
+int drawable ic_action_pause 0x7f020034
+int drawable ic_action_play 0x7f020035
+int drawable ic_action_stop 0x7f020036
+int drawable ic_launcher 0x7f020037
+int drawable icon 0x7f020038
 int id action_bar 0x7f090031
 int id action_bar_activity_content 0x7f090003
 int id action_bar_container 0x7f090030
@@ -348,11 +352,11 @@ int id action_menu_presenter 0x7f090006
 int id action_mode_bar 0x7f09002e
 int id action_mode_bar_stub 0x7f09002d
 int id action_mode_close_button 0x7f090020
-int id action_settings 0x7f090041
+int id action_settings 0x7f090043
 int id activity_chooser_view_content 0x7f090021
 int id always 0x7f090014
 int id beginning 0x7f09001b
-int id button1 0x7f090040
+int id button1 0x7f090041
 int id checkbox 0x7f090029
 int id collapseActionView 0x7f090015
 int id decor_content_parent 0x7f09002f
@@ -388,6 +392,7 @@ int id search_mag_icon 0x7f090038
 int id search_plate 0x7f090039
 int id search_src_text 0x7f09003a
 int id search_voice_btn 0x7f09003e
+int id seekBar1 0x7f090042
 int id shortcut 0x7f09002a
 int id showCustom 0x7f090010
 int id showHome 0x7f090011
@@ -395,8 +400,9 @@ int id showTitle 0x7f090012
 int id split_action_bar 0x7f090004
 int id submit_area 0x7f09003c
 int id tabMode 0x7f09000c
-int id textView1 0x7f09003f
 int id title 0x7f090027
+int id toggleButton1 0x7f09003f
+int id toggleButton2 0x7f090040
 int id up 0x7f090001
 int id useLogo 0x7f090013
 int id withText 0x7f090018
