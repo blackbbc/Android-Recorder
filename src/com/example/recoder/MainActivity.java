@@ -9,9 +9,11 @@ import java.util.Date;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,7 +23,8 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -31,10 +34,24 @@ public class MainActivity extends ActionBarActivity {
 	private ToggleButton record,control;
 	private Button stop;
 	private MediaRecorder recorder;
+	private MediaPlayer player;
 	private ListView list;
 	private ArrayList<String> mylist;
 	private ArrayAdapter<String> adapter;
 	private String songPath;
+	private SeekBar bar;
+	
+	
+    Handler handler=new Handler();
+    Runnable updateThread=new Runnable() {
+		
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			bar.setProgress(player.getCurrentPosition()/1000);
+			handler.postDelayed(updateThread, 100);
+		}
+	};
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +62,9 @@ public class MainActivity extends ActionBarActivity {
         control=(ToggleButton)findViewById(R.id.toggleButton2);
         stop=(Button)findViewById(R.id.button1);
         list=(ListView)findViewById(R.id.listView1);
+        bar=(SeekBar)findViewById(R.id.seekBar1);
         mylist=new ArrayList<String>();
+        player=new MediaPlayer();
         
         adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_activated_1,mylist);
         list.setAdapter(adapter);
@@ -59,9 +78,11 @@ public class MainActivity extends ActionBarActivity {
 				// TODO Auto-generated method stub
 				if (record.isChecked()) {
 					startRecord();
+					Toast.makeText(MainActivity.this, "¿ªÊ¼Â¼Òô", Toast.LENGTH_SHORT).show();
 				} else {
 					stopRecord();
 					refreshFiles();
+					Toast.makeText(MainActivity.this, "½áÊøÂ¼Òô", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -71,10 +92,13 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (record.isChecked()) {
-					
+				if (control.isChecked()) {
+					player.start();
+					bar.setMax(player.getDuration()/1000);
+					handler.post(updateThread);
 				} else {
-					
+					handler.removeCallbacks(updateThread);
+					player.pause();
 				}
 			}
 		});
@@ -84,7 +108,11 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+				handler.removeCallbacks(updateThread);
+				player.stop();
+				bar.setProgress(0);
+				control.setChecked(false);
+				prepareSong();
 			}
 		});
         
@@ -96,6 +124,7 @@ public class MainActivity extends ActionBarActivity {
 				// TODO Auto-generated method stub
 				songPath=(String) list.getItemAtPosition(position);
 				songPath=Environment.getExternalStorageDirectory().getPath()+"/sound_recorder/"+songPath;
+				prepareSong();
 			}
 		});
         
@@ -138,6 +167,30 @@ public class MainActivity extends ActionBarActivity {
 				return false;
 			}
 		});
+        
+        bar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				// TODO Auto-generated method stub
+				if (fromUser==true) {
+					player.seekTo(progress*1000);
+				}
+			}
+		});
 
     }
     
@@ -145,9 +198,9 @@ public class MainActivity extends ActionBarActivity {
     	recorder=new MediaRecorder();
     	recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
     	recorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
-    	recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC_ELD);
-    	recorder.setAudioChannels(2);
-    	recorder.setOutputFile(Environment.getExternalStorageDirectory().getPath()+"/sound_recorder/"+getTime()+".acc");
+    	recorder.setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC);
+    	recorder.setAudioChannels(1);
+    	recorder.setOutputFile(Environment.getExternalStorageDirectory().getPath()+"/sound_recorder/"+getTime()+".aac");
     	
     	
     	try {
@@ -192,6 +245,27 @@ public class MainActivity extends ActionBarActivity {
     	String str=formatter.format(curDate);
     	return str;
     }
+    
+    private void prepareSong() {
+		try {
+			player.reset();
+			player.setDataSource(songPath);
+			player.prepare();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
 
     
 }

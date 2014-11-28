@@ -30,7 +30,7 @@
 
     <SeekBar
         android:id="@+id/seekBar1"
-        android:layout_width="200dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_above="@+id/toggleButton1"
         android:layout_centerHorizontal="true" />
