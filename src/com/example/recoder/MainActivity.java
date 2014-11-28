@@ -197,10 +197,10 @@ public class MainActivity extends ActionBarActivity {
     private void startRecord() {
     	recorder=new MediaRecorder();
     	recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-    	recorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
-    	recorder.setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC);
+    	recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+    	recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
     	recorder.setAudioChannels(1);
-    	recorder.setOutputFile(Environment.getExternalStorageDirectory().getPath()+"/sound_recorder/"+getTime()+".aac");
+    	recorder.setOutputFile(Environment.getExternalStorageDirectory().getPath()+"/sound_recorder/"+getTime()+".amr");
     	
     	
     	try {
